@@ -14,14 +14,14 @@ class HelperFunctionsTest(TestCase):
     def test__extract_client_ip_address(self) -> None:
         fake_ip = fake.ipv4()
         meta = {"REMOTE_ADDR": fake_ip, "REQUEST_METHOD": "GET", "wsgi.input": StringIO()}
-        ip_by_remote_addr = _extract_client_ip_address(WSGIRequest(meta))
+        ip_by_remote_addr = _extract_client_ip_address(WSGIRequest(meta))  # pyright: ignore[reportCallIssue]
         self.assertEqual(ip_by_remote_addr, fake_ip)
 
-        ip_by_http_x_forwarded = _extract_client_ip_address(WSGIRequest(meta | {"HTTP_X_FORWARDED_FOR": fake_ip}))
+        ip_by_http_x_forwarded = _extract_client_ip_address(WSGIRequest(meta | {"HTTP_X_FORWARDED_FOR": fake_ip}))  # pyright: ignore[reportCallIssue]
         self.assertEqual(ip_by_http_x_forwarded, fake_ip)
 
     @parameterized.expand([(fake.pystr(), type(None)), (fake.ipv4(), tuple)])
-    def test__fetch_geolocation(self, ip_address: str, return_type: type(None) | tuple) -> None:
+    def test__fetch_geolocation(self, ip_address: str, return_type: type[None] | tuple) -> None:
         self.assertIsInstance(_fetch_geolocation(ip_address), return_type)
 
 
@@ -35,7 +35,7 @@ class ViewsTest(TestCaseWithData):
             f"{self.parking_lot.geolocation[0]},{self.parking_lot.geolocation[1]}'>{self.parking_lot.address}</a>",
             html_table,
         )
-        for stream_source in self.parking_lot.stream_sources.filter(parking_lot_id=self.parking_lot.pk):
+        for stream_source in self.parking_lot.stream_sources.filter(parking_lot_id=self.parking_lot.pk):  # pyright: ignore[reportAttributeAccessIssue]
             self.assertIn(stream_source.stream_source, html_table)
 
     def test_index(self) -> None:

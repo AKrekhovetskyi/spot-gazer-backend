@@ -71,12 +71,12 @@ class ParkingLot(models.Model):
     def get_is_private(self) -> str:
         # Get label from choices enum.
         is_private_index = self.Answer.values.index(self.is_private)
-        return self.Answer.labels[is_private_index]
+        return self.Answer.labels[is_private_index]  # pyright: ignore[reportReturnType]
 
     @property
     def get_is_free(self) -> str:
         is_free_index = self.Answer.values.index(self.is_free)
-        return self.Answer.labels[is_free_index]
+        return self.Answer.labels[is_free_index]  # pyright: ignore[reportReturnType]
 
 
 class VideoStreamSource(models.Model):

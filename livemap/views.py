@@ -43,12 +43,12 @@ def _compose_html_table(parking: ParkingLot) -> str:
         "Free": parking.get_is_free,
         "Total spots": parking.total_spots,
         "Spots for disables": spots_for_disabled if (spots_for_disabled := parking.spots_for_disabled) else "",
-        "Free spots": parking.total_spots - parking.occupancies.latest().occupied_spots
-        if parking.occupancies.exists()
+        "Free spots": parking.total_spots - parking.occupancies.latest().occupied_spots  # pyright: ignore[reportAttributeAccessIssue]
+        if parking.occupancies.exists()  # pyright: ignore[reportAttributeAccessIssue]
         else "",
     }
     lives = "- Live "
-    for stream_source in parking.stream_sources.filter(parking_lot_id=parking.id):
+    for stream_source in parking.stream_sources.filter(parking_lot_id=parking.id):  # pyright: ignore[reportAttributeAccessIssue]
         lives += f"<a href='{stream_source.stream_source}'> 🔴 </a>"
 
     html_table = f"""
