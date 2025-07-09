@@ -28,7 +28,7 @@ class VideoStreamSourceAdmin(admin.ModelAdmin):
 @admin.register(Occupancy)
 class OccupancyAdmin(admin.ModelAdmin):
     def time_seconds(self, occupancy: Occupancy) -> str:
-        return occupancy.timestamp.strftime("%d.%m.%Y %X")
+        return occupancy.timestamp.strftime("%d.%m.%Y %X")  # pyright: ignore[reportAttributeAccessIssue]
 
     time_seconds.admin_order_field = "timestamp"  # type: ignore[attr-defined]
     time_seconds.short_description = "Timestamp"  # type: ignore[attr-defined]
