@@ -4,8 +4,7 @@ from django.forms import ValidationError
 from parameterized import parameterized
 
 from livemap.models import ParkingLot, VideoStreamSource, validate_geolocation
-
-from .. import TestCaseWithData, fake
+from tests import TestCaseWithData, fake
 
 
 class ParkingLotModelTest(TestCaseWithData):

@@ -7,8 +7,7 @@ from django.urls import reverse
 from parameterized import parameterized
 
 from livemap.views import _compose_html_table, _extract_client_ip_address, _fetch_geolocation
-
-from .. import TestCaseWithData, fake
+from tests import TestCaseWithData, fake
 
 
 class HelperFunctionsTest(TestCase):
