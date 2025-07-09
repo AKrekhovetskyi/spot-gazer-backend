@@ -24,7 +24,7 @@ def _extract_client_ip_address(request: WSGIRequest) -> str | None:
 
 @lru_cache
 def _fetch_geolocation(ip_address: str) -> tuple[float, float] | None:
-    response = requests.get(f"https://ipinfo.io/{ip_address}/json")
+    response = requests.get(f"https://ipinfo.io/{ip_address}/json", timeout=3000)
 
     if response.status_code == HTTPStatus.OK:
         data = response.json()
