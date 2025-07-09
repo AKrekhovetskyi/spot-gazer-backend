@@ -91,7 +91,7 @@ class VideoStreamSource(models.Model):
     def __str__(self) -> str:
         return f"{self.stream_source}, {self.parking_lot}"
 
-    def save(self, *args, **kwargs) -> None:
+    def save(self, *args: Any, **kwargs: Any) -> None:
         self.clean()
         super().save(*args, **kwargs)
 
