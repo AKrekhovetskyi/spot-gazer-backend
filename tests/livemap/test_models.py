@@ -32,9 +32,9 @@ class ParkingLotModelTest(TestCaseWithData):
             ),
         ]
     )
-    def test_validate_geolocation(self, input: Any, error_message: str) -> None:
-        with self.assertRaisesMessage(ValidationError, error_message, msg=input):
-            validate_geolocation(input)
+    def test_validate_geolocation(self, geolocation: Any, error_message: str) -> None:
+        with self.assertRaisesMessage(ValidationError, error_message, msg=geolocation):
+            validate_geolocation(geolocation)
 
 
 class VideoStreamSourceTest(TestCaseWithData):
