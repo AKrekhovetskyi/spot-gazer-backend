@@ -1,4 +1,5 @@
 from functools import lru_cache
+from http import HTTPStatus
 
 import folium
 import requests  # type: ignore[import]
@@ -7,6 +8,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 from livemap.models import ParkingLot
+
+NUMBER_OF_COORDINATES = 2
 
 
 @lru_cache
@@ -23,10 +26,10 @@ def _extract_client_ip_address(request: WSGIRequest) -> str | None:
 def _fetch_geolocation(ip_address: str) -> tuple[float, float] | None:
     response = requests.get(f"https://ipinfo.io/{ip_address}/json")
 
-    if response.status_code == 200:
+    if response.status_code == HTTPStatus.OK:
         data = response.json()
         location = data.get("loc", "").split(",")
-        if len(location) == 2:
+        if len(location) == NUMBER_OF_COORDINATES:
             latitude, longitude = location
             return float(latitude), float(longitude)
     return None
