@@ -9,7 +9,7 @@ echo
 echo "[INFO] Installing main dependencies into a '$VIRTUAL_ENV' ..."
 pip3 install -r requirements.txt
 
-pre-commit install
+pre-commit install --install-hooks
 
 echo
 echo "[INFO] Performing migrations."
