@@ -37,11 +37,13 @@ class Address(models.Model):
 
 
 def validate_geolocation(geolocation: Any) -> None:
-    if not isinstance(geolocation, list) or len(geolocation) != 2:
+    # TODO @AKrekhovetskyi: Use separate fields for latitude and longitude.  # noqa: FIX002
+    # https://github.com/AKrekhovetskyi/spot-gazer/issues/28
+    if not isinstance(geolocation, list) or len(geolocation) != 2:  # noqa: PLR2004
         raise ValidationError("The geolocation value must be a list of 2 integers or floating-point numbers!")
     if not all([isinstance(location, (int, float)) for location in geolocation]):
         raise ValidationError("Both values must be either integers or floating-point numbers!")
-    if not (-90 <= geolocation[0] <= 90) or not (-180 <= geolocation[1] <= 180):
+    if not (-90 <= geolocation[0] <= 90) or not (-180 <= geolocation[1] <= 180):  # noqa: PLR2004
         raise ValidationError(
             "The latitude should be in the range [-90, 90] and the longitude should be in the range [-180, 180]"
         )
