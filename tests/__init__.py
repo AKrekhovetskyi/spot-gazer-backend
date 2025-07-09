@@ -1,9 +1,7 @@
 from django.test import TestCase
-
-from livemap.models import City, Country, Address, ParkingLot, VideoStreamSource
-
-
 from faker import Faker
+
+from livemap.models import Address, City, Country, ParkingLot, VideoStreamSource
 
 fake = Faker()
 

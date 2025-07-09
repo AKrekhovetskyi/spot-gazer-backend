@@ -2,7 +2,7 @@
   <img src="Logo with text.png" alt="SpotGazer" />
 </p>
 
----
+______________________________________________________________________
 
 SpotGazer is your smart parking companion! This open-source project utilizes Python, Ultralytics YOLOv8, and Django to eliminate your pain in finding free parking spaces. 😤
 
@@ -11,6 +11,7 @@ With SpotGazer, you can monitor parking lot occupancy in real-time through video
 Join us in creating a greener, smarter future of parking! 🌍 🌿
 
 ## Installation
+
 > **NOTE:** `Python 3` and the `venv` module must already be installed.
 
 To install the system, run the following commands in the Linux terminal:
@@ -40,13 +41,13 @@ python3 -m run
 ```
 
 ## Features
+
 - All details about parking lot in every marker on a map: address, private/shared, paid/free, total spots, spots for the disabled, number of occupied spots.
 - Switching to online broadcast of a parking lot.
 - Ability to switch to Google Maps by clicking on the parking lot address.
 - Asynchronous processing of video streams with a fixed recognition interval.
 - Debug console.
 - Approximate location detection based on a client IP.
-
 
 ## Contribution
 

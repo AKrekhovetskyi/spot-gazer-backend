@@ -9,7 +9,7 @@ from django.shortcuts import render
 from livemap.models import ParkingLot
 
 
-@lru_cache()
+@lru_cache
 def _extract_client_ip_address(request: WSGIRequest) -> str | None:
     req_headers = request.META
     if x_forwarded_for_value := req_headers.get("HTTP_X_FORWARDED_FOR"):
@@ -19,7 +19,7 @@ def _extract_client_ip_address(request: WSGIRequest) -> str | None:
     return ip_addr
 
 
-@lru_cache()
+@lru_cache
 def _fetch_geolocation(ip_address: str) -> tuple[float, float] | None:
     response = requests.get(f"https://ipinfo.io/{ip_address}/json")
 

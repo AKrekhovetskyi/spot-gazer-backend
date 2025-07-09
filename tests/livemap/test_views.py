@@ -1,12 +1,12 @@
 from http import HTTPStatus
-
-from django.test import TestCase
-from django.core.handlers.wsgi import WSGIRequest
 from io import StringIO
-from parameterized import parameterized
-from django.urls import reverse
 
-from livemap.views import _fetch_geolocation, _extract_client_ip_address, _compose_html_table
+from django.core.handlers.wsgi import WSGIRequest
+from django.test import TestCase
+from django.urls import reverse
+from parameterized import parameterized
+
+from livemap.views import _compose_html_table, _extract_client_ip_address, _fetch_geolocation
 
 from .. import TestCaseWithData, fake
 
@@ -29,7 +29,7 @@ class HelperFunctionsTest(TestCase):
 class ViewsTest(TestCaseWithData):
     def test__compose_html_table(self) -> None:
         html_table = _compose_html_table(self.parking_lot)
-        for field in {"Address", "Private", "Free", "Total spots", "Spots for disables", "Free spots"}:
+        for field in ("Address", "Private", "Free", "Total spots", "Spots for disables", "Free spots"):
             self.assertIn(field, html_table)
         self.assertIn(
             "<a href='https://www.google.com/maps/search/?api=1&query="
