@@ -6,12 +6,12 @@ from .models import ParkingLot, VideoStreamSource
 
 
 class VideoStreamSourceSerializer(serializers.ModelSerializer):
-    parking_lot = serializers.CharField(source="parking_lot.address", read_only=True)
+    parking_lot_address = serializers.CharField(source="parking_lot.address", read_only=True)
     parking_lot_id = serializers.IntegerField(help_text="ID of an existing parking lot.")
 
     class Meta:
         model = VideoStreamSource
-        fields = ("id", "parking_lot", "parking_lot_id", "stream_source", "processing_rate", "is_active")
+        fields = ("id", "parking_lot_address", "parking_lot_id", "stream_source", "processing_rate", "is_active")
 
     def create(self, validated_data: dict[str, Any]) -> VideoStreamSource:
         parking_lot_id = validated_data.get("parking_lot_id")
