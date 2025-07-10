@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from django.contrib.auth import get_user_model
 from faker import Faker
 
-from livemap.models import Address, City, Country, ParkingLot, VideoStreamSource
+from livemap.models import Address, City, Country, Occupancy, ParkingLot, VideoStreamSource
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import UserManager
@@ -43,3 +43,5 @@ class TestCaseWithData:
             processing_rate=self.small_parking_lot.processing_rate,
             is_active=True,
         )
+        Occupancy.objects.create(parking_lot=self.parking_lot, occupied_spots=fake.pyint(min_value=1))
+        Occupancy.objects.create(parking_lot=self.parking_lot, occupied_spots=fake.pyint(min_value=1))
