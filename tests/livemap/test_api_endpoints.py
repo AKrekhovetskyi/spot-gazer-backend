@@ -2,7 +2,6 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 
 from livemap.models import VideoStreamSource
-from livemap.serializers import VideoStreamSourceSerializer
 from tests import TestCaseWithData, fake
 
 
@@ -13,10 +12,10 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
     def test_get_method(self) -> None:
         response = self.client.get(self.video_stream_path, content_type=self.content_type)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        elements_number = 2
+        elements_number = 1
         self.assertEqual(len(response.json()), elements_number)
-        for stream in response.json():
-            self.assertEqual(VideoStreamSourceSerializer.Meta.fields, tuple(stream))
+        streams_number = 2
+        self.assertEqual(len(response.json()[0]["streams"]), streams_number)
 
     def test_post_method(self) -> None:
         fake_stream = {
@@ -38,4 +37,4 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
         filtered_response = self.client.get(
             f"{self.video_stream_path}?active_only=true", content_type=self.content_type
         )
-        self.assertEqual(len(response.json()) - 1, len(filtered_response.json()))
+        self.assertEqual(len(response.json()[0]["streams"]) - 1, len(filtered_response.json()))
