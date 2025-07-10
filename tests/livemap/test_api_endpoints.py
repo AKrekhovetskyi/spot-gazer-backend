@@ -4,6 +4,8 @@ from rest_framework.test import APITestCase
 from livemap.models import VideoStreamSource
 from tests import TestCaseWithData, fake
 
+CONTENT_TYPE = "application/json"
+
 
 class VideoStreamSourceTests(TestCaseWithData, APITestCase):
     video_stream_path = "/api/video-stream-sources/"
@@ -38,3 +40,22 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
             f"{self.video_stream_path}?active_only=true", content_type=self.content_type
         )
         self.assertEqual(len(response.json()[0]["streams"]) - 1, len(filtered_response.json()))
+
+
+class OccupancyTests(TestCaseWithData, APITestCase):
+    occupancy_path = "/api/occupancy/"
+
+    def test_get_method(self) -> None:
+        response = self.client.get(self.occupancy_path, content_type=CONTENT_TYPE)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        elements_number = 2
+        self.assertEqual(len(response.json()), elements_number)
+
+    def test_post_method(self) -> None:
+        occupancy = {"parking_lot_id": self.parking_lot.pk, "occupied_spots": fake.pyint(min_value=1)}
+        response = self.client.post(self.occupancy_path, content_type=CONTENT_TYPE, data=occupancy)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(self.occupancy_path, content_type=CONTENT_TYPE, data=occupancy)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
