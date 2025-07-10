@@ -1,13 +1,14 @@
 from typing import Any
 
 from django.forms import ValidationError
+from django.test import TestCase
 from parameterized import parameterized
 
 from livemap.models import ParkingLot, VideoStreamSource, validate_geolocation
 from tests import TestCaseWithData, fake
 
 
-class ParkingLotModelTest(TestCaseWithData):
+class ParkingLotModelTest(TestCaseWithData, TestCase):
     def test_parking_lot_choices(self) -> None:
         self.assertIn(self.parking_lot.get_is_private, ParkingLot.Answer.labels)
         self.assertIn(self.parking_lot.get_is_free, ParkingLot.Answer.labels)
@@ -37,7 +38,7 @@ class ParkingLotModelTest(TestCaseWithData):
             validate_geolocation(geolocation)
 
 
-class VideoStreamSourceTest(TestCaseWithData):
+class VideoStreamSourceTest(TestCaseWithData, TestCase):
     def test_clean(self) -> None:
         processing_rate = self.stream_source_data["processing_rate"]
         self.stream_source_data["processing_rate"] = fake.pyint(min_value=6)
