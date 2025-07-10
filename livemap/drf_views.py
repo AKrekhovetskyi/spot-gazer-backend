@@ -47,7 +47,7 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
             try:
                 grouped_video_streams.append(
                     {
-                        "parking_lot": video_stream["parking_lot"],
+                        "parking_lot_address": video_stream["parking_lot_address"],
                         "parking_lot_id": video_stream["parking_lot_id"],
                         "processing_rate": video_stream["processing_rate"],
                         "streams": stream_details.pop(video_stream["parking_lot_id"]),
