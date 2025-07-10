@@ -4,8 +4,8 @@ from django.db.models import QuerySet
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
 
-from .models import VideoStreamSource
-from .serializers import VideoStreamSourceSerializer
+from .models import Occupancy, VideoStreamSource
+from .serializers import OccupancySerializer, VideoStreamSourceSerializer
 
 
 class VideoStreamSourceViewSet(viewsets.ModelViewSet):
@@ -58,3 +58,11 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
                 continue
 
         return Response(grouped_video_streams)
+
+
+class OccupancyViewSet(viewsets.ModelViewSet):
+    queryset = Occupancy.objects.all().select_related(
+        "parking_lot__address", "parking_lot__address__city", "parking_lot__address__city__country"
+    )
+    serializer_class = OccupancySerializer
+    permission_classes: ClassVar = [permissions.IsAuthenticatedOrReadOnly]
