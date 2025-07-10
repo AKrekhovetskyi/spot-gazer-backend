@@ -9,10 +9,9 @@ CONTENT_TYPE = "application/json"
 
 class VideoStreamSourceTests(TestCaseWithData, APITestCase):
     video_stream_path = "/api/video-stream-sources/"
-    content_type = "application/json"
 
     def test_get_method(self) -> None:
-        response = self.client.get(self.video_stream_path, content_type=self.content_type)
+        response = self.client.get(self.video_stream_path, content_type=CONTENT_TYPE)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         elements_number = 1
         self.assertEqual(len(response.json()), elements_number)
@@ -27,18 +26,16 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
             "is_active": fake.pybool(),
         }
         self.client.login(username=self.username, password=self.password)
-        request = self.client.post(self.video_stream_path, content_type=self.content_type, data=fake_stream)
+        request = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream)
         self.assertEqual(request.status_code, status.HTTP_201_CREATED)
         self.assertEqual(request.json()["stream_source"], fake_stream["stream_source"])
 
     def test_filters(self) -> None:
-        response = self.client.get(self.video_stream_path, content_type=self.content_type)
+        response = self.client.get(self.video_stream_path, content_type=CONTENT_TYPE)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         VideoStreamSource.objects.filter(pk=self.big_parking_lot.pk).update(is_active=False)
-        filtered_response = self.client.get(
-            f"{self.video_stream_path}?active_only=true", content_type=self.content_type
-        )
+        filtered_response = self.client.get(f"{self.video_stream_path}?active_only=true", content_type=CONTENT_TYPE)
         self.assertEqual(len(response.json()[0]["streams"]) - 1, len(filtered_response.json()))
 
 
