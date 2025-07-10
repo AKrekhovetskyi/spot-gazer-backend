@@ -22,6 +22,8 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         return self.queryset
 
     def list(self, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+        # There may be several CCTV cameras in one parking lot.
+        # The code below groups parking lots by video streams.
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         video_streams = serializer.data
