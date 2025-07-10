@@ -1,20 +1,14 @@
 #!/bin/bash
 
-# Set up a main virtual environment
-sudo apt install -y screen
+echo "[INFO] Installing main dependencies"
 export PYTHONPATH="$(pwd)"
-python3 -m venv .venv
-source .venv/bin/activate
-echo
-echo "[INFO] Installing main dependencies into a '$VIRTUAL_ENV' ..."
-pip3 install -r requirements.txt
-
+poetry install
 pre-commit install --install-hooks
 
 echo
-echo "[INFO] Performing migrations."
-python3 manage.py migrate
+echo "[INFO] Performing migrations"
+poetry run python3 manage.py migrate
 
 echo
-echo "[INFO] Run tests."
-python3 manage.py test tests
+echo "[INFO] Run tests"
+poetry run python3 manage.py test tests
