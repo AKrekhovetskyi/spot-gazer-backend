@@ -25,7 +25,7 @@ class HelperFunctionsTest(TestCase):
         self.assertIsInstance(_fetch_geolocation(ip_address), return_type)
 
 
-class ViewsTest(TestCaseWithData):
+class ViewsTest(TestCaseWithData, TestCase):
     def test__compose_html_table(self) -> None:
         html_table = _compose_html_table(self.parking_lot)
         for field in ("Address", "Private", "Free", "Total spots", "Spots for disables", "Free spots"):
