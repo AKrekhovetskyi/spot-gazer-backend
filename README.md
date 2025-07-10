@@ -3,6 +3,13 @@
 The DRF Backend service of the parking lot occupancy recognition system.
 The repository is a part of a multi-service [SpotGather](https://github.com/AKrekhovetskyi/spot-gazer) system.
 
+## ✨ Features
+
+### RESTful API
+
+- `api/video-stream-sources` endpoint with CRUD operations to interact with video streams;
+- `api/occupancy` endpoint with CRUD operations to interact with occupancy of parking lots;
+
 ## 🛠️ Prerequisites
 
 To successfully setup backend, your system must meet the following requirements:
