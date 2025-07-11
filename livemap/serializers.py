@@ -22,24 +22,36 @@ class VideoStreamSourceSerializer(serializers.ModelSerializer):
         fields = ("id", "parking_lot_address", "parking_lot_id", "stream_source", "processing_rate", "is_active")
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
-        parking_lot_id = attrs.get("parking_lot_id")
-        processing_rate = attrs.get("processing_rate")
-        if processing_rate and not parking_lot_id:
+        if attrs.get("processing_rate") and not attrs.get("parking_lot_id"):
             raise serializers.ValidationError(
                 {
                     "parking_lot_id": "`parking_lot_id` field must be provided along with the `processing_rate` one",
                 }
             )
+        return attrs
+
+    def create(self, validated_data: dict[str, Any]) -> VideoStreamSource:
+        parking_lot_id = validated_data.get("parking_lot_id")
+        processing_rate = validated_data.get("processing_rate")
         if parking_lot_id and processing_rate:
             video_stream = VideoStreamSource.objects.filter(parking_lot=parking_lot_id).first()
             if video_stream and video_stream.processing_rate != processing_rate:
                 raise serializers.ValidationError(
                     {
-                        "processing_rate": f"The processing rate for the parking lot {parking_lot_id} "
-                        f"must be {video_stream.processing_rate} seconds"
+                        "processing_rate": [
+                            f"The processing rate for the parking lot {parking_lot_id} "
+                            f"must be {video_stream.processing_rate} seconds"
+                        ]
                     }
                 )
-        return attrs
+        return VideoStreamSource.objects.create(**validated_data)
+
+    def update(self, instance: VideoStreamSource, validated_data: dict[str, Any]) -> VideoStreamSource:
+        if (processing_rate := validated_data.get("processing_rate")) and processing_rate != instance.processing_rate:
+            VideoStreamSource.objects.filter(parking_lot_id=validated_data["parking_lot_id"]).update(
+                processing_rate=processing_rate
+            )
+        return super().update(instance, validated_data)
 
 
 class OccupancySerializer(serializers.ModelSerializer):
