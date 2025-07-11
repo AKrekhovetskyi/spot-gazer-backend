@@ -4,7 +4,7 @@ from django.forms import ValidationError
 from django.test import TestCase
 from parameterized import parameterized
 
-from livemap.models import ParkingLot, VideoStreamSource, validate_geolocation
+from livemap.models import ParkingLot, validate_geolocation
 from tests import TestCaseWithData, fake
 
 
@@ -36,13 +36,3 @@ class ParkingLotModelTest(TestCaseWithData, TestCase):
     def test_validate_geolocation(self, geolocation: Any, error_message: str) -> None:
         with self.assertRaisesMessage(ValidationError, error_message, msg=geolocation):
             validate_geolocation(geolocation)
-
-
-class VideoStreamSourceTest(TestCaseWithData, TestCase):
-    def test_clean(self) -> None:
-        processing_rate = self.stream_source_data["processing_rate"]
-        self.stream_source_data["processing_rate"] = fake.pyint(min_value=6)
-        with self.assertRaisesMessage(
-            ValidationError, f"The processing rate for this parking lot should be {processing_rate} s!"
-        ):
-            VideoStreamSource.objects.create(**self.stream_source_data)
