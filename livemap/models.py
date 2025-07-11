@@ -82,7 +82,9 @@ class ParkingLot(models.Model):
 class VideoStreamSource(models.Model):
     parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, related_name="stream_sources")
     stream_source = models.URLField()
-    processing_rate = models.PositiveIntegerField(help_text="In seconds.")
+    processing_rate = models.PositiveIntegerField(
+        help_text="In seconds. The same for all video streams from the same parking lot."
+    )
     parking_zone = models.JSONField(
         blank=True, null=True, help_text="An array in a format [[[[int, int]], [[int, int]], ...]]."
     )
