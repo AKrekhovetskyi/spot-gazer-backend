@@ -91,20 +91,6 @@ class VideoStreamSource(models.Model):
     def __str__(self) -> str:
         return f"{self.stream_source}, {self.parking_lot}"
 
-    def save(self, *args: Any, **kwargs: Any) -> None:
-        self.clean()
-        super().save(*args, **kwargs)
-
-    def clean(self) -> None:
-        # Check for existing instances with the same `parking_lot`
-        existing_instances = VideoStreamSource.objects.filter(parking_lot=self.parking_lot)
-
-        for instance in existing_instances:
-            if instance.parking_lot == self.parking_lot and instance.processing_rate != self.processing_rate:
-                raise ValidationError(
-                    f"The processing rate for this parking lot should be {instance.processing_rate} s!"
-                )
-
 
 class Occupancy(models.Model):
     parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, related_name="occupancies")
