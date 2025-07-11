@@ -30,6 +30,14 @@ class TestCaseWithData:
             is_free=fake.random_element(ParkingLot.Answer.values),
             geolocation=[float(fake.latitude()), float(fake.longitude())],
         )
+        ParkingLot.objects.create(
+            address=self.address,
+            total_spots=fake.pyint(),
+            spots_for_disabled=fake.pyint(),
+            is_private=fake.random_element(ParkingLot.Answer.values),
+            is_free=fake.random_element(ParkingLot.Answer.values),
+            geolocation=[float(fake.latitude()), float(fake.longitude())],
+        )
         self.stream_source_data = {
             "parking_lot": self.parking_lot,
             "stream_source": fake.url(),
