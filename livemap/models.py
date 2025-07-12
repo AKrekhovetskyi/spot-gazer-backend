@@ -84,10 +84,17 @@ class VideoStreamSource(models.Model):
     processing_rate = models.PositiveIntegerField(
         choices=ProcessingRate, help_text="In seconds. The same for all video streams from the same parking lot."
     )
+    is_active = models.BooleanField(default=True)
+
+    # The fields below are for internal services only!
     parking_zone = models.JSONField(
         blank=True, null=True, help_text="An array in a format [[[[int, int]], [[int, int]], ...]]."
     )
-    is_active = models.BooleanField(default=True)
+    in_use_until = models.DateTimeField(
+        null=True,
+        blank=True,
+        help_text="Date and time in UTC timezone until the video stream is in use.",
+    )
 
     def __str__(self) -> str:
         return f"{self.stream_source}, {self.parking_lot}"
