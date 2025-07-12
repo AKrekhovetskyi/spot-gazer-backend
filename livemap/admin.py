@@ -7,17 +7,17 @@ admin.site.register(Country)
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ("city_name", "country")
+    list_display = ("id", "city_name", "country")
 
 
 @admin.register(Address)
 class AddressAdmin(admin.ModelAdmin):
-    list_display = ("parking_lot_address", "city")
+    list_display = ("id", "parking_lot_address", "city")
 
 
 @admin.register(ParkingLot)
 class ParkingLotAdmin(admin.ModelAdmin):
-    list_display = ("latitude", "longitude", "total_spots", "address")
+    list_display = ("id", "latitude", "longitude", "total_spots", "address")
 
 
 @admin.register(VideoStreamSource)
@@ -33,4 +33,4 @@ class OccupancyAdmin(admin.ModelAdmin):
     time_seconds.admin_order_field = "timestamp"  # type: ignore[attr-defined]
     time_seconds.short_description = "Timestamp"  # type: ignore[attr-defined]
 
-    list_display = ("occupied_spots", "time_seconds", "parking_lot")
+    list_display = ("id", "occupied_spots", "time_seconds", "parking_lot")
