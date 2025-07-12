@@ -28,7 +28,8 @@ class TestCaseWithData:
             spots_for_disabled=fake.pyint(),
             is_private=fake.random_element(ParkingLot.Answer.values),
             is_free=fake.random_element(ParkingLot.Answer.values),
-            geolocation=[float(fake.latitude()), float(fake.longitude())],
+            latitude=fake.latitude(),
+            longitude=fake.longitude(),
         )
         ParkingLot.objects.create(
             address=self.address,
@@ -36,7 +37,8 @@ class TestCaseWithData:
             spots_for_disabled=fake.pyint(),
             is_private=fake.random_element(ParkingLot.Answer.values),
             is_free=fake.random_element(ParkingLot.Answer.values),
-            geolocation=[float(fake.latitude()), float(fake.longitude())],
+            latitude=fake.latitude(),
+            longitude=fake.longitude(),
         )
         self.stream_source_data = {
             "parking_lot": self.parking_lot,

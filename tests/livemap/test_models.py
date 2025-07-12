@@ -1,38 +1,10 @@
-from typing import Any
-
-from django.forms import ValidationError
 from django.test import TestCase
-from parameterized import parameterized
 
-from livemap.models import ParkingLot, validate_geolocation
-from tests import TestCaseWithData, fake
+from livemap.models import ParkingLot
+from tests import TestCaseWithData
 
 
 class ParkingLotModelTest(TestCaseWithData, TestCase):
     def test_parking_lot_choices(self) -> None:
         self.assertIn(self.parking_lot.get_is_private, ParkingLot.Answer.labels)
         self.assertIn(self.parking_lot.get_is_free, ParkingLot.Answer.labels)
-
-    @parameterized.expand(
-        [
-            (
-                fake.pyfloat(),
-                "The geolocation value must be a list of 2 integers or floating-point numbers!",
-            ),
-            (
-                fake.pylist(nb_elements=fake.pyint(min_value=3, max_value=10)),
-                "The geolocation value must be a list of 2 integers or floating-point numbers!",
-            ),
-            (
-                fake.pylist(nb_elements=2, variable_nb_elements=False, value_types=[str]),
-                "Both values must be either integers or floating-point numbers!",
-            ),
-            (
-                [fake.pyfloat(max_value=-91), fake.pyfloat(max_value=-181)],
-                "The latitude should be in the range [-90, 90] and the longitude should be in the range [-180, 180]",
-            ),
-        ]
-    )
-    def test_validate_geolocation(self, geolocation: Any, error_message: str) -> None:
-        with self.assertRaisesMessage(ValidationError, error_message, msg=geolocation):
-            validate_geolocation(geolocation)
