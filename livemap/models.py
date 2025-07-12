@@ -54,7 +54,9 @@ class ParkingLot(models.Model):
         NO = 0, "No"
         YES = 1, "Yes"
 
-    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="parking_lots")
+    address = models.ForeignKey(
+        Address, on_delete=models.CASCADE, related_name="parking_lots", related_query_name="parking_lot"
+    )
     total_spots = models.PositiveIntegerField()
     spots_for_disabled = models.PositiveIntegerField(null=True, blank=True)
     is_private = models.IntegerField(choices=Answer.choices, default=Answer.NO)
@@ -80,7 +82,9 @@ class ParkingLot(models.Model):
 
 
 class VideoStreamSource(models.Model):
-    parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, related_name="stream_sources")
+    parking_lot = models.ForeignKey(
+        ParkingLot, on_delete=models.CASCADE, related_name="stream_sources", related_query_name="stream_source"
+    )
     stream_source = models.URLField()
     processing_rate = models.PositiveIntegerField(
         help_text="In seconds. The same for all video streams from the same parking lot."
