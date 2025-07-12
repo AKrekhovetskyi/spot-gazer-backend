@@ -16,10 +16,19 @@ class VideoStreamSourceSerializer(serializers.ModelSerializer):
     parking_lot_id = serializers.IntegerField(
         validators=[validate_parking_lot_id], help_text="ID of an existing parking lot."
     )
+    in_use_until = serializers.DateTimeField(read_only=True)
 
     class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
         model = VideoStreamSource
-        fields = ("id", "parking_lot_address", "parking_lot_id", "stream_source", "processing_rate", "is_active")
+        fields = (
+            "id",
+            "parking_lot_address",
+            "parking_lot_id",
+            "stream_source",
+            "processing_rate",
+            "in_use_until",
+            "is_active",
+        )
 
     def validate(self, attrs: dict[str, Any]) -> dict[str, Any]:
         if attrs.get("processing_rate") and not attrs.get("parking_lot_id"):
