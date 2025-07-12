@@ -43,7 +43,7 @@ class TestCaseWithData:
         self.stream_source_data = {
             "parking_lot": self.parking_lot,
             "stream_source": fake.url(),
-            "processing_rate": fake.pyint(min_value=1, max_value=5),
+            "processing_rate": fake.random_element(VideoStreamSource.ProcessingRate.values),
             "is_active": True,
         }
         self.small_parking_lot = VideoStreamSource.objects.create(**self.stream_source_data)
