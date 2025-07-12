@@ -1,8 +1,11 @@
+from collections import defaultdict
+from datetime import UTC, datetime
 from typing import Any, ClassVar
 
-from django.db.models import QuerySet
+from django.db.models import Q, QuerySet
 from rest_framework import permissions, viewsets
 from rest_framework.response import Response
+from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
 from .serializers import OccupancySerializer, VideoStreamSourceSerializer
@@ -16,10 +19,35 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
     permission_classes: ClassVar = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self) -> QuerySet[VideoStreamSource, VideoStreamSource]:  # pyright: ignore[reportIncompatibleMethodOverride]
+        queryset = self.queryset
         active_only = self.request.query_params.get("active_only")  # pyright: ignore[reportAttributeAccessIssue]
         if active_only:
-            return self.queryset.filter(is_active=True)
-        return self.queryset
+            queryset = queryset.filter(is_active=True)
+
+        mark_in_use_until = self.request.query_params.get("mark_in_use_until")  # pyright: ignore[reportAttributeAccessIssue]
+        if mark_in_use_until:
+            # 0) Validate the incoming ISO-8601 string.
+            try:
+                in_use_until = datetime.fromisoformat(mark_in_use_until)
+            except ValueError as error:
+                raise ValidationError({"mark_in_use_until": "Must be a valid ISO 8601 datetime string"}) from error
+
+            now = datetime.now(UTC)
+
+            # 1) Find all the items whose `in_use_until` field is either `null` or has an expired date and time.
+            not_in_use_q = Q(in_use_until__isnull=True) | Q(in_use_until__lt=now)
+            candidates = queryset.filter(not_in_use_q)
+
+            # 2) Capture their PKs (so we know exactly which ones).
+            ids_to_update = list(candidates.values_list("pk", flat=True))
+
+            # 3) Bulk-update just those rows.
+            queryset.filter(pk__in=ids_to_update).update(in_use_until=in_use_until)
+
+            # 4) Return those exact rows (now updated).
+            return queryset.filter(pk__in=ids_to_update)
+
+        return queryset
 
     def list(self, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
         # There may be several CCTV cameras in one parking lot.
@@ -27,20 +55,17 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
         video_streams = serializer.data
-        stream_details = {}
+        stream_details = defaultdict(list)
+
         for stream in video_streams:
-            if stream["parking_lot_id"] in stream_details:
-                stream_details[stream["parking_lot_id"]].append(
-                    {"id": stream["id"], "stream_source": stream["stream_source"], "is_active": stream["is_active"]}
-                )
-            else:
-                stream_details[stream["parking_lot_id"]] = [
-                    {
-                        "id": stream["id"],
-                        "stream_source": stream["stream_source"],
-                        "is_active": stream["is_active"],
-                    }
-                ]
+            stream_details[stream["parking_lot_id"]].append(
+                {
+                    "id": stream["id"],
+                    "stream_source": stream["stream_source"],
+                    "is_active": stream["is_active"],
+                    "in_use_until": stream.get("in_use_until"),
+                }
+            )
 
         grouped_video_streams = []
         for video_stream in video_streams:
