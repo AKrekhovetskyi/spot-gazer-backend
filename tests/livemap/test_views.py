@@ -32,7 +32,7 @@ class ViewsTest(TestCaseWithData, TestCase):
             self.assertIn(field, html_table)
         self.assertIn(
             "<a href='https://www.google.com/maps/search/?api=1&query="
-            f"{self.parking_lot.geolocation[0]},{self.parking_lot.geolocation[1]}'>{self.parking_lot.address}</a>",
+            f"{self.parking_lot.latitude},{self.parking_lot.longitude}'>{self.parking_lot.address}</a>",
             html_table,
         )
         for stream_source in self.parking_lot.stream_sources.filter(parking_lot_id=self.parking_lot.pk):  # pyright: ignore[reportAttributeAccessIssue]
