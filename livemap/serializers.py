@@ -48,9 +48,9 @@ class VideoStreamSourceSerializer(serializers.ModelSerializer):
 
     def update(self, instance: VideoStreamSource, validated_data: dict[str, Any]) -> VideoStreamSource:
         if (processing_rate := validated_data.get("processing_rate")) and processing_rate != instance.processing_rate:
-            VideoStreamSource.objects.filter(parking_lot_id=validated_data["parking_lot_id"]).update(
-                processing_rate=processing_rate
-            )
+            VideoStreamSource.objects.filter(parking_lot_id=validated_data["parking_lot_id"]).exclude(
+                id=instance.pk
+            ).update(processing_rate=processing_rate)
         return super().update(instance, validated_data)
 
 
