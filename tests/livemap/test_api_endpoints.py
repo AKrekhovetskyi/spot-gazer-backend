@@ -86,6 +86,8 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
         self.assertEqual(len(response.json()[0]["streams"]) - 1, len(filtered_response.json()))
 
     def test_mark_in_use_until_filter(self) -> None:
+        self.client.login(username=self.username, password=self.password)
+
         delta_seconds = timedelta(seconds=2)
         in_use_until = (datetime.now(UTC) + delta_seconds).isoformat()
         response = self.client.get(
