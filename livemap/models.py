@@ -82,12 +82,20 @@ class ParkingLot(models.Model):
 
 
 class VideoStreamSource(models.Model):
+    class ProcessingRate(models.IntegerChoices):
+        FIVE = 5, "5 seconds"
+        TEN = 10, "10 seconds"
+        TWENTY = 30, "30 seconds"
+        FORTY = 60, "60 seconds"
+        EIGHTY = 120, "120 seconds"
+        ONE_SIXTY = 180, "180 seconds"
+
     parking_lot = models.ForeignKey(
         ParkingLot, on_delete=models.CASCADE, related_name="stream_sources", related_query_name="stream_source"
     )
     stream_source = models.URLField()
     processing_rate = models.PositiveIntegerField(
-        help_text="In seconds. The same for all video streams from the same parking lot."
+        choices=ProcessingRate, help_text="In seconds. The same for all video streams from the same parking lot."
     )
     parking_zone = models.JSONField(
         blank=True, null=True, help_text="An array in a format [[[[int, int]], [[int, int]], ...]]."
