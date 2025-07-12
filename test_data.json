@@ -350,7 +350,7 @@
     "fields": {
       "parking_lot": 1,
       "stream_source": "https://www.youtube.com/watch?v=LcSaBafrb-w&ab_channel=LingoNetworks",
-      "processing_rate": 3,
+      "processing_rate": 5,
       "parking_zone": null,
       "is_active": true
     }
@@ -361,7 +361,7 @@
     "fields": {
       "parking_lot": 3,
       "stream_source": "https://www.youtube.com/watch?v=EPKWu223XEg&ab_channel=TownofCollingwood",
-      "processing_rate": 5,
+      "processing_rate": 10,
       "parking_zone": null,
       "is_active": true
     }
@@ -372,7 +372,7 @@
     "fields": {
       "parking_lot": 2,
       "stream_source": "https://www.youtube.com/watch?v=iq-CT8UQzgo&ab_channel=BrightonResor",
-      "processing_rate": 10,
+      "processing_rate": 30,
       "parking_zone": null,
       "is_active": true
     }
@@ -383,7 +383,7 @@
     "fields": {
       "parking_lot": 4,
       "stream_source": "https://www.youtube.com/watch?v=mpwfjhmyEzw&ab_channel=NordicTelecomLan%C5%A1kroun",
-      "processing_rate": 5,
+      "processing_rate": 60,
       "parking_zone": null,
       "is_active": true
     }
@@ -394,7 +394,7 @@
     "fields": {
       "parking_lot": 5,
       "stream_source": "https://www.youtube.com/watch?v=gdz-CEWA0cw&ab_channel=FreeLomwebkamer",
-      "processing_rate": 5,
+      "processing_rate": 120,
       "parking_zone": null,
       "is_active": true
     }
@@ -405,7 +405,7 @@
     "fields": {
       "parking_lot": 6,
       "stream_source": "https://www.youtube.com/watch?v=rOxE2Q6kOxE&ab_channel=PAMICOCZECH%2Cs.r.o.",
-      "processing_rate": 3,
+      "processing_rate": 180,
       "parking_zone": null,
       "is_active": true
     }
@@ -416,7 +416,7 @@
     "fields": {
       "parking_lot": 7,
       "stream_source": "https://www.youtube.com/watch?v=-90Gh2mFFGU",
-      "processing_rate": 10,
+      "processing_rate": 5,
       "parking_zone": null,
       "is_active": true
     }
@@ -427,7 +427,7 @@
     "fields": {
       "parking_lot": 8,
       "stream_source": "https://www.youtube.com/watch?v=n-DQMYLoPco&ab_channel=www.zlin.cz",
-      "processing_rate": 3,
+      "processing_rate": 10,
       "parking_zone": null,
       "is_active": true
     }
@@ -438,7 +438,7 @@
     "fields": {
       "parking_lot": 9,
       "stream_source": "https://www.youtube.com/watch?v=HBDD3j5so0g&ab_channel=BorderBuddyCustomsBrokers",
-      "processing_rate": 15,
+      "processing_rate": 30,
       "parking_zone": null,
       "is_active": true
     }
@@ -449,18 +449,9 @@
     "fields": {
       "parking_lot": 10,
       "stream_source": "https://www.youtube.com/watch?v=e9LYewJGQlk&ab_channel=OregonStateUniversity-Liv",
-      "processing_rate": 15,
+      "processing_rate": 60,
       "parking_zone": null,
       "is_active": true
-    }
-  },
-  {
-    "model": "livemap.occupancy",
-    "pk": 1,
-    "fields": {
-      "parking_lot": 10,
-      "occupied_spots": 0,
-      "timestamp": "2023-10-12T13:48:58.827Z"
     }
   },
   {
@@ -468,7 +459,7 @@
     "pk": 2,
     "fields": {
       "parking_lot": 1,
-      "occupied_spots": 6,
+      "occupied_spots": 7,
       "timestamp": "2023-10-12T13:48:59.023Z"
     }
   },
