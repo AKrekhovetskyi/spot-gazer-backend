@@ -1,6 +1,4 @@
-from typing import Any
-
-from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 
@@ -36,19 +34,6 @@ class Address(models.Model):
         return f"{self.parking_lot_address}, {self.city}"
 
 
-def validate_geolocation(geolocation: Any) -> None:
-    # TODO @AKrekhovetskyi: Use separate fields for latitude and longitude.  # noqa: FIX002
-    # https://github.com/AKrekhovetskyi/spot-gazer/issues/28
-    if not isinstance(geolocation, list) or len(geolocation) != 2:  # noqa: PLR2004
-        raise ValidationError("The geolocation value must be a list of 2 integers or floating-point numbers!")
-    if not all(isinstance(location, (int, float)) for location in geolocation):
-        raise ValidationError("Both values must be either integers or floating-point numbers!")
-    if not (-90 <= geolocation[0] <= 90) or not (-180 <= geolocation[1] <= 180):  # noqa: PLR2004
-        raise ValidationError(
-            "The latitude should be in the range [-90, 90] and the longitude should be in the range [-180, 180]"
-        )
-
-
 class ParkingLot(models.Model):
     class Answer(models.IntegerChoices):
         NO = 0, "No"
@@ -61,9 +46,11 @@ class ParkingLot(models.Model):
     spots_for_disabled = models.PositiveIntegerField(null=True, blank=True)
     is_private = models.IntegerField(choices=Answer.choices, default=Answer.NO)
     is_free = models.IntegerField(choices=Answer.choices, default=Answer.YES)
-    geolocation = models.JSONField(
-        validators=[validate_geolocation],
-        help_text="Latitude and longitude of a parking lot. Ex.: [49.911848, 16.611212]",
+    latitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=[MinValueValidator(-90.0), MaxValueValidator(90.0)], null=True
+    )
+    longitude = models.DecimalField(
+        max_digits=9, decimal_places=6, validators=[MinValueValidator(-180.0), MaxValueValidator(180.0)], null=True
     )
 
     def __str__(self) -> str:

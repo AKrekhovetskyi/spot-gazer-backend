@@ -203,10 +203,8 @@
       "spots_for_disabled": 0,
       "is_private": 0,
       "is_free": 0,
-      "geolocation": [
-        38.1502804,
-        -79.073553
-      ]
+      "latitude": "38.150280",
+      "longitude": "-79.073553"
     }
   },
   {
@@ -218,10 +216,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        40.598166,
-        -111.5829
-      ]
+      "latitude": "40.598166",
+      "longitude": "-111.582900"
     }
   },
   {
@@ -233,10 +229,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        44.500284,
-        -80.216432
-      ]
+      "latitude": "44.500284",
+      "longitude": "-80.216432"
     }
   },
   {
@@ -248,10 +242,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 0,
-      "geolocation": [
-        49.912078,
-        16.611533
-      ]
+      "latitude": "49.912078",
+      "longitude": "16.611533"
     }
   },
   {
@@ -263,10 +255,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        50.531309,
-        15.372369
-      ]
+      "latitude": "50.531309",
+      "longitude": "15.372369"
     }
   },
   {
@@ -278,10 +268,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 0,
-      "geolocation": [
-        50.587421,
-        15.157351
-      ]
+      "latitude": "50.587421",
+      "longitude": "15.157351"
     }
   },
   {
@@ -293,10 +281,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        49.293559,
-        17.390054
-      ]
+      "latitude": "49.293559",
+      "longitude": "17.390054"
     }
   },
   {
@@ -308,10 +294,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        49.333321,
-        17.578163
-      ]
+      "latitude": "49.333321",
+      "longitude": "17.578163"
     }
   },
   {
@@ -323,10 +307,8 @@
       "spots_for_disabled": null,
       "is_private": 1,
       "is_free": 1,
-      "geolocation": [
-        49.004346,
-        -122.735065
-      ]
+      "latitude": "49.004346",
+      "longitude": "-122.735065"
     }
   },
   {
@@ -338,10 +320,8 @@
       "spots_for_disabled": null,
       "is_private": 0,
       "is_free": 1,
-      "geolocation": [
-        44.563067,
-        -123.273677
-      ]
+      "latitude": "44.563067",
+      "longitude": "-123.273677"
     }
   },
   {

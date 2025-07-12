@@ -38,7 +38,7 @@ def _fetch_geolocation(ip_address: str) -> tuple[float, float] | None:
 def _compose_html_table(parking: ParkingLot) -> str:
     parking_popup = {
         "Address": "<a href='https://www.google.com/maps/search/?api=1&query="
-        f"{parking.geolocation[0]},{parking.geolocation[1]}'>{parking.address}</a>",
+        f"{parking.latitude},{parking.longitude}'>{parking.address}</a>",
         "Private": parking.get_is_private,
         "Free": parking.get_is_free,
         "Total spots": parking.total_spots,
@@ -84,6 +84,6 @@ def index(request: WSGIRequest) -> HttpResponse:
 
     for parking in parkings:
         popup = _compose_html_table(parking)
-        folium.Marker(parking.geolocation, folium.Popup(popup)).add_to(folium_map)
+        folium.Marker([parking.latitude, parking.longitude], folium.Popup(popup)).add_to(folium_map)
 
     return render(request, "index.html", {"map": folium_map.get_root().render()})

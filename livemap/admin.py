@@ -17,7 +17,7 @@ class AddressAdmin(admin.ModelAdmin):
 
 @admin.register(ParkingLot)
 class ParkingLotAdmin(admin.ModelAdmin):
-    list_display = ("geolocation", "total_spots", "address")
+    list_display = ("latitude", "longitude", "total_spots", "address")
 
 
 @admin.register(VideoStreamSource)
