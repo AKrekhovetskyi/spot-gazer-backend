@@ -8,7 +8,7 @@ class Country(models.Model):
     country_name = models.CharField(max_length=100, unique=True)
 
     class Meta:
-        verbose_name_plural = "Countries"
+        verbose_name_plural = "countries"
 
     def __str__(self) -> str:
         return str(self.country_name)
@@ -19,7 +19,7 @@ class City(models.Model):
     city_name = models.CharField(max_length=50)
 
     class Meta:
-        verbose_name_plural = "Cities"
+        verbose_name_plural = "cities"
 
     def __str__(self) -> str:
         return f"{self.city_name}, {self.country}"
@@ -30,7 +30,7 @@ class Address(models.Model):
     parking_lot_address = models.CharField(max_length=200)
 
     class Meta:
-        verbose_name_plural = "Addresses"
+        verbose_name_plural = "addresses"
 
     def __str__(self) -> str:
         return f"{self.parking_lot_address}, {self.city}"
@@ -105,7 +105,7 @@ class Occupancy(models.Model):
 
     class Meta:
         get_latest_by = "timestamp"
-        verbose_name_plural = "Occupancy"
+        verbose_name_plural = "occupancy"
 
     def __str__(self) -> str:
         return f"{self.occupied_spots} occupied spots, {self.parking_lot}"
