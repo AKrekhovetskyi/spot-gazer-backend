@@ -15,7 +15,7 @@ class Country(models.Model):
 
 
 class City(models.Model):
-    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="cities")
     city_name = models.CharField(max_length=50)
 
     class Meta:
@@ -26,7 +26,7 @@ class City(models.Model):
 
 
 class Address(models.Model):
-    city = models.ForeignKey(City, on_delete=models.CASCADE)
+    city = models.ForeignKey(City, on_delete=models.CASCADE, related_name="addresses")
     parking_lot_address = models.CharField(max_length=200)
 
     class Meta:
@@ -54,7 +54,7 @@ class ParkingLot(models.Model):
         NO = 0, "No"
         YES = 1, "Yes"
 
-    address = models.ForeignKey(Address, on_delete=models.CASCADE)
+    address = models.ForeignKey(Address, on_delete=models.CASCADE, related_name="parking_lots")
     total_spots = models.PositiveIntegerField()
     spots_for_disabled = models.PositiveIntegerField(null=True, blank=True)
     is_private = models.IntegerField(choices=Answer.choices, default=Answer.NO)
