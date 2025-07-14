@@ -59,6 +59,11 @@ Then run SpotGazer:
 poetry run python3 -m manage.py runserver
 ```
 
+## 💾 Storage
+
+For **development and testing**, the environment uses a default **SQLite database**.
+In **production**, the application connects to a **MySQL cluster** deployed on **AWS RDS**.
+
 ## 👨‍💻 Contribution
 
 Make sure to install `pre-commit` and its hooks before making any commits:
