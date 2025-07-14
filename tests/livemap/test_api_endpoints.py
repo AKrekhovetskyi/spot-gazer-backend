@@ -30,26 +30,26 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
             "is_active": fake.pybool(),
         }
         self.client.login(username=self.username, password=self.password)
-        request = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream)
-        self.assertEqual(request.status_code, status.HTTP_201_CREATED, msg=request.json())
-        self.assertEqual(request.json()["stream_source"], fake_stream["stream_source"])
+        response = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED, msg=response.json())
+        self.assertEqual(response.json()["stream_source"], fake_stream["stream_source"])
 
         fake_stream_copy = deepcopy(fake_stream)
         fake_parking_lot_id = fake.pyint(min_value=10)
         fake_stream_copy["parking_lot_id"] = fake_parking_lot_id
-        request = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream_copy)
-        self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
+        response = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream_copy)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
-            request.json()["parking_lot_id"][0], f"No parking lot found for the provided ID {fake_parking_lot_id}"
+            response.json()["parking_lot_id"][0], f"No parking lot found for the provided ID {fake_parking_lot_id}"
         )
 
         fake_stream_copy = deepcopy(fake_stream)
         processing_rate = VideoStreamSource.ProcessingRate.values
         processing_rate.remove(self.stream_source_data["processing_rate"])
         fake_stream_copy["processing_rate"] = fake.random_element(processing_rate)
-        request = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream_copy)
-        self.assertEqual(request.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn("The processing rate for the parking lot", request.json()["processing_rate"][0])
+        response = self.client.post(self.video_stream_path, content_type=CONTENT_TYPE, data=fake_stream_copy)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("The processing rate for the parking lot", response.json()["processing_rate"][0])
 
     def test_patch_method(self) -> None:
         self.client.login(username=self.username, password=self.password)
