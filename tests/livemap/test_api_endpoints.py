@@ -17,10 +17,10 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
     def test_get_method(self) -> None:
         response = self.client.get(self.video_stream_path, content_type=CONTENT_TYPE)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        elements_number = 1
-        self.assertEqual(len(response.json()), elements_number)
+        results_number = 1
+        self.assertEqual(len(response.json()["results"]), results_number, msg=response.json())
         streams_number = 2
-        self.assertEqual(len(response.json()[0]["streams"]), streams_number)
+        self.assertEqual(len(response.json()["results"][0]["streams"]), streams_number)
 
     def test_post_method(self) -> None:
         fake_stream = {
@@ -83,7 +83,11 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
         filtered_response = self.client.get(
             self.video_stream_path, content_type=CONTENT_TYPE, query_params={"active_only": True}
         )
-        self.assertEqual(len(response.json()[0]["streams"]) - 1, len(filtered_response.json()))
+        self.assertEqual(
+            len(response.json()["results"][0]["streams"]) - 1,
+            len(filtered_response.json()["results"][0]["streams"]),
+            msg=f"{response.json()=} {filtered_response.json()=}",
+        )
 
     def test_mark_in_use_until_filter(self) -> None:
         self.client.login(username=self.username, password=self.password)
@@ -96,7 +100,7 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.json())
 
         # All returned streams should have `in_use_until` set to the requested value
-        for group in response.json():
+        for group in response.json()["results"]:
             for stream in group["streams"]:
                 self.assertEqual(datetime.fromisoformat(stream["in_use_until"]), datetime.fromisoformat(in_use_until))
 
@@ -106,7 +110,7 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
             f"{self.video_stream_path}", content_type=CONTENT_TYPE, query_params={"mark_in_use_until": in_use_until}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.json())
-        self.assertEqual(response.json(), [])
+        self.assertEqual(response.json(), {"count": 0, "next": None, "previous": None, "results": []})
 
         sleep(delta_seconds.seconds)
         in_use_until = (datetime.now(UTC) + delta_seconds).isoformat()
@@ -124,7 +128,7 @@ class OccupancyTests(TestCaseWithData, APITestCase):
         response = self.client.get(self.occupancy_path, content_type=CONTENT_TYPE)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         elements_number = 2
-        self.assertEqual(len(response.json()), elements_number)
+        self.assertEqual(response.json()["count"], elements_number)
 
     def test_post_method(self) -> None:
         occupancy = {"parking_lot_id": self.parking_lot.pk, "occupied_spots": fake.pyint(min_value=1)}
