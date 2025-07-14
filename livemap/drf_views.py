@@ -53,14 +53,10 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         # The code below groups parking lots by video streams.
         queryset = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-        else:
-            serializer = self.get_serializer(queryset, many=True)
-
+        serializer = self.get_serializer(page, many=True)
         video_streams = serializer.data
-
         stream_details = defaultdict(list)
+
         for stream in video_streams:
             stream_details[stream["parking_lot_id"]].append(
                 {
