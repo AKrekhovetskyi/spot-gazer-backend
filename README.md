@@ -75,5 +75,5 @@ pre-commit install --install-hooks
 Run the tests with the following command:
 
 ```bash
-poetry run pytest tests -vv -s -rA
+poetry run python manage.py test tests
 ```
