@@ -75,6 +75,19 @@ class VideoStreamSourceTests(TestCaseWithData, APITestCase):
             "`parking_lot_id` field must be provided along with the `processing_rate` one",
         )
 
+    def test_pagination(self) -> None:
+        response = self.client.get(self.video_stream_path, content_type=CONTENT_TYPE)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        streams_number = 2
+        self.assertEqual(len(response.json()["results"][0]["streams"]), streams_number)
+
+        response = self.client.get(
+            self.video_stream_path, content_type=CONTENT_TYPE, query_params={"limit": 1, "offset": 1}
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        streams_number = 1
+        self.assertEqual(len(response.json()["results"][0]["streams"]), streams_number, msg=response.json())
+
     def test_active_only_filter(self) -> None:
         response = self.client.get(self.video_stream_path, content_type=CONTENT_TYPE)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
