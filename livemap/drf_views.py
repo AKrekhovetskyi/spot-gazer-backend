@@ -4,7 +4,6 @@ from typing import Any, ClassVar
 
 from django.db.models import Q, QuerySet
 from rest_framework import permissions, viewsets
-from rest_framework.response import Response
 from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
@@ -53,10 +52,15 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         # There may be several CCTV cameras in one parking lot.
         # The code below groups parking lots by video streams.
         queryset = self.filter_queryset(self.get_queryset())
-        serializer = self.get_serializer(queryset, many=True)
-        video_streams = serializer.data
-        stream_details = defaultdict(list)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+        else:
+            serializer = self.get_serializer(queryset, many=True)
 
+        video_streams = serializer.data
+
+        stream_details = defaultdict(list)
         for stream in video_streams:
             stream_details[stream["parking_lot_id"]].append(
                 {
@@ -82,7 +86,7 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
                 # The `KeyError` is expected because there are might be duplicates in the `video_streams`.
                 continue
 
-        return Response(grouped_video_streams)
+        return self.get_paginated_response(grouped_video_streams)
 
 
 class OccupancyViewSet(viewsets.ModelViewSet):
