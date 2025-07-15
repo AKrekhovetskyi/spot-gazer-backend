@@ -11,7 +11,8 @@ The repository is a part of a multi-service [SpotGather](https://github.com/AKre
   - `?active_only`: `true` or `false` - returns only video streams which are still working;
   - `?mark_in_use_until`: UTC `datetime` (authentication required) - inner service parameter. Reserves video streams for a specified period of time.
 - `api/occupancy` endpoint with CRUD operations to interact with occupancy of parking lots;
-- pagination at all endpoints.
+- pagination at all endpoints;
+- JWT authentication.
 
 ## 🛠️ Prerequisites
 
