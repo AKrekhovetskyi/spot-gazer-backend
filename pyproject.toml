@@ -13,6 +13,7 @@ dependencies = [
     "markdown>=3.8.2",
     "django-filter>=25.1",
     "mysqlclient>=2.2.7",
+    "djangorestframework-simplejwt>=5.5.0",
 ]
 
 [tool.poetry]
