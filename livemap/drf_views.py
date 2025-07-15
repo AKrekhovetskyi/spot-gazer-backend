@@ -1,9 +1,9 @@
 from collections import defaultdict
 from datetime import UTC, datetime
-from typing import Any, ClassVar
+from typing import Any
 
 from django.db.models import Q, QuerySet
-from rest_framework import permissions, viewsets
+from rest_framework import viewsets
 from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
@@ -15,7 +15,6 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         "parking_lot__address", "parking_lot__address__city", "parking_lot__address__city__country"
     )
     serializer_class = VideoStreamSourceSerializer
-    permission_classes: ClassVar = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_queryset(self) -> QuerySet[VideoStreamSource, VideoStreamSource]:  # pyright: ignore[reportIncompatibleMethodOverride]
         queryset = self.queryset
@@ -90,4 +89,3 @@ class OccupancyViewSet(viewsets.ModelViewSet):
         "parking_lot__address", "parking_lot__address__city", "parking_lot__address__city__country"
     )
     serializer_class = OccupancySerializer
-    permission_classes: ClassVar = [permissions.IsAuthenticatedOrReadOnly]
