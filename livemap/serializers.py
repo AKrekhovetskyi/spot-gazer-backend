@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, ClassVar
 
 from rest_framework import serializers
 
@@ -24,8 +24,8 @@ class VideoStreamSourceSerializer(serializers.ModelSerializer):
             "id",
             "parking_lot_address",
             "parking_lot_id",
-            "stream_source",
             "processing_rate",
+            "stream_source",
             "in_use_until",
             "is_active",
         )
@@ -61,6 +61,22 @@ class VideoStreamSourceSerializer(serializers.ModelSerializer):
                 id=instance.pk
             ).update(processing_rate=processing_rate)
         return super().update(instance, validated_data)
+
+
+class StreamSerializerSchema(serializers.ModelSerializer):
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
+        model = VideoStreamSource
+        fields = ("id", "stream_source", "in_use_until", "is_active")
+        read_only_fields = ("in_use_until",)
+
+
+class VideoStreamSourceSerializerSchema(VideoStreamSourceSerializer):
+    streams = StreamSerializerSchema(read_only=True)
+
+    class Meta:  # pyright: ignore[reportIncompatibleVariableOverride]
+        model = VideoStreamSource
+        fields = ("parking_lot_address", "parking_lot_id", "processing_rate", "streams")
+        extra_kwargs: ClassVar = {"stream_source": {"write_only": True}, "is_active": {"write_only": True}}
 
 
 class OccupancySerializer(serializers.ModelSerializer):
