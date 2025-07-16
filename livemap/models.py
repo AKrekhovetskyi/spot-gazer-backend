@@ -87,9 +87,6 @@ class VideoStreamSource(models.Model):
     is_active = models.BooleanField(default=True)
 
     # The fields below are for internal services only!
-    parking_zone = models.JSONField(
-        blank=True, null=True, help_text="An array in a format [[[[int, int]], [[int, int]], ...]]."
-    )
     in_use_until = models.DateTimeField(
         null=True,
         blank=True,
