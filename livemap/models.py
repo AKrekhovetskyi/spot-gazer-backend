@@ -90,7 +90,7 @@ class VideoStreamSource(models.Model):
     in_use_until = models.DateTimeField(
         null=True,
         blank=True,
-        help_text="Date and time in UTC timezone until the video stream is in use.",
+        help_text="Date and time in UTC timezone and ISO-8601 format until the video stream is in use.",
     )
 
     def __str__(self) -> str:
