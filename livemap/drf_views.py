@@ -3,11 +3,12 @@ from datetime import UTC, datetime
 from typing import Any
 
 from django.db.models import Q, QuerySet
+from drf_spectacular.utils import extend_schema
 from rest_framework import viewsets
 from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
-from .serializers import OccupancySerializer, VideoStreamSourceSerializer
+from .serializers import OccupancySerializer, VideoStreamSourceSerializer, VideoStreamSourceSerializerSchema
 
 
 class VideoStreamSourceViewSet(viewsets.ModelViewSet):
@@ -47,6 +48,7 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
 
         return queryset
 
+    @extend_schema(responses=VideoStreamSourceSerializerSchema)
     def list(self, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
         # There may be several CCTV cameras in one parking lot.
         # The code below groups parking lots by video streams.
