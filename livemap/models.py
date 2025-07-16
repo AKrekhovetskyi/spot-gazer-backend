@@ -72,10 +72,10 @@ class VideoStreamSource(models.Model):
     class ProcessingRate(models.IntegerChoices):
         FIVE = 5, "5 seconds"
         TEN = 10, "10 seconds"
-        TWENTY = 30, "30 seconds"
-        FORTY = 60, "60 seconds"
-        EIGHTY = 120, "120 seconds"
-        ONE_SIXTY = 180, "180 seconds"
+        THIRTY = 30, "30 seconds"
+        SIXTY = 60, "60 seconds"
+        ONE_HUNDRED_TWENTY = 120, "120 seconds"
+        ONE_HUNDRED_EIGHTY = 180, "180 seconds"
 
     parking_lot = models.ForeignKey(
         ParkingLot, on_delete=models.CASCADE, related_name="stream_sources", related_query_name="stream_source"
