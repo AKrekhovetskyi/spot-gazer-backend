@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 import os
+import tomllib
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,10 +133,13 @@ REST_FRAMEWORK = {
 if DEBUG:
     REST_FRAMEWORK["DEFAULT_AUTHENTICATION_CLASSES"].insert(0, "rest_framework.authentication.SessionAuthentication")
 
+with Path("pyproject.toml").open(mode="rb") as fb:
+    pyproject = tomllib.load(fb)
+
 SPECTACULAR_SETTINGS = {
-    "TITLE": "SpotGazer Backend",
-    "DESCRIPTION": "Backend service for the parking lot occupancy recognition system",
-    "VERSION": "0.1.0",
+    "TITLE": pyproject["project"]["name"].replace("-", " ").title(),
+    "DESCRIPTION": pyproject["project"]["description"],
+    "VERSION": pyproject["project"]["version"],
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
