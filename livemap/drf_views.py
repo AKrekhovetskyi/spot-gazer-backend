@@ -1,14 +1,18 @@
 from collections import defaultdict
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Any
 
 from django.db.models import Q, QuerySet
-from drf_spectacular.utils import extend_schema
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import viewsets
 from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
 from .serializers import OccupancySerializer, VideoStreamSourceSerializer, VideoStreamSourceSerializerSchema
+
+ACTIVE_ONLY_PARAM = "active_only"
+MARK_IN_USE_UNTIL_PARAM = "mark_in_use_until"
 
 
 class VideoStreamSourceViewSet(viewsets.ModelViewSet):
@@ -19,17 +23,17 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self) -> QuerySet[VideoStreamSource, VideoStreamSource]:  # pyright: ignore[reportIncompatibleMethodOverride]
         queryset = self.queryset
-        active_only = self.request.query_params.get("active_only")  # pyright: ignore[reportAttributeAccessIssue]
+        active_only = self.request.query_params.get(ACTIVE_ONLY_PARAM)  # pyright: ignore[reportAttributeAccessIssue]
         if active_only:
             queryset = queryset.filter(is_active=True)
 
-        mark_in_use_until = self.request.query_params.get("mark_in_use_until")  # pyright: ignore[reportAttributeAccessIssue]
+        mark_in_use_until = self.request.query_params.get(MARK_IN_USE_UNTIL_PARAM)  # pyright: ignore[reportAttributeAccessIssue]
         if mark_in_use_until and self.request.user.is_authenticated:
             # 0) Validate the incoming ISO-8601 string.
             try:
                 in_use_until = datetime.fromisoformat(mark_in_use_until)
             except ValueError as error:
-                raise ValidationError({"mark_in_use_until": "Must be a valid ISO 8601 datetime string"}) from error
+                raise ValidationError({MARK_IN_USE_UNTIL_PARAM: "Must be a valid ISO 8601 datetime string"}) from error
 
             now = datetime.now(UTC)
 
@@ -48,7 +52,22 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
 
         return queryset
 
-    @extend_schema(responses=VideoStreamSourceSerializerSchema)
+    @extend_schema(
+        responses=VideoStreamSourceSerializerSchema,
+        parameters=[
+            OpenApiParameter(
+                ACTIVE_ONLY_PARAM,
+                type=OpenApiTypes.BOOL,
+                description="Filter out inactive video streams.",
+            ),
+            OpenApiParameter(
+                MARK_IN_USE_UNTIL_PARAM,
+                type=OpenApiTypes.DATETIME,
+                description=VideoStreamSource.in_use_until.field.help_text,
+                examples=[OpenApiExample((datetime.now(UTC) + timedelta(minutes=5)).isoformat())],
+            ),
+        ],
+    )
     def list(self, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
         # There may be several CCTV cameras in one parking lot.
         # The code below groups parking lots by video streams.
