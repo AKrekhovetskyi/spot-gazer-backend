@@ -151,7 +151,7 @@ class OccupancyTests(ExtendedTestCaseWithData):
     def test_post_method(self) -> None:
         occupancy = {"parking_lot_id": self.parking_lot.pk, "occupied_spots": fake.pyint(min_value=1)}
         response = self.client.post(self.occupancy_path, data=occupancy)
-        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
         response = self.client.post(self.occupancy_path, data=occupancy, **self.default_kwargs)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
