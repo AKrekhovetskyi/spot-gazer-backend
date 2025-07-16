@@ -28,7 +28,7 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(is_active=True)
 
         mark_in_use_until = self.request.query_params.get(MARK_IN_USE_UNTIL_PARAM)  # pyright: ignore[reportAttributeAccessIssue]
-        if mark_in_use_until and self.request.user.is_authenticated:
+        if mark_in_use_until:
             # 0) Validate the incoming ISO-8601 string.
             try:
                 in_use_until = datetime.fromisoformat(mark_in_use_until)
