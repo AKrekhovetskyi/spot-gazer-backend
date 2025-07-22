@@ -11,10 +11,10 @@ The repository is a part of a multi-service [SpotGather](https://github.com/AKre
 ### Endpoints
 
 - `api/schema/docs/` endpoint with Swagger documentation
-- `api/video-stream-sources` endpoint with CRUD operations to interact with video streams. Available query parameters:
+- `api/video-stream-sources/` endpoint with CRUD operations to interact with video streams. Available query parameters:
   - `?active_only`: `true` or `false` - returns only video streams which are still working
   - `?mark_in_use_until`: UTC `datetime` (authentication required) - inner service parameter. Reserves video streams for a specified period of time
-- `api/occupancy` endpoint with CRUD operations to interact with occupancy of parking lots
+- `api/occupancy/` endpoint with CRUD operations to interact with occupancy of parking lots
 
 ## 🛠️ Prerequisites
 
