@@ -6,7 +6,7 @@ The repository is a part of a multi-service [SpotGather](https://github.com/AKre
 ## ✨ Features
 
 - JWT authentication ([default settings](https://django-rest-framework-simplejwt.readthedocs.io/en/latest/settings.html) are used).
-- Pagination at all endpoints.
+- Pagination at all endpoints (see the local [`REST_FRAMEWORK`](./django_core/settings.py) settings).
 
 ### Endpoints
 
