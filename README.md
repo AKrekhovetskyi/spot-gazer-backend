@@ -37,13 +37,13 @@ git clone https://github.com/AndriyKy/spot-gazer.git
 cd spot-gazer-backend
 ```
 
-Create an `.env` file from [`.env.sample`](../.env.sample) and set the necessary variables
+Create an `.env` file from [`.env.sample`](./.env.sample) and set the necessary variables
 
 ```bash
 mv .env.sample .env
 ```
 
-Run [`build`](../build.sh) (for Linux based on Debian):
+Run [`build`](./build.sh) (for Linux based on Debian):
 
 ```bash
 ./build.sh
