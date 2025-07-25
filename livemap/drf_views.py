@@ -1,11 +1,13 @@
 from collections import defaultdict
 from datetime import UTC, datetime, timedelta
-from typing import Any
+from typing import Any, cast
 
-from django.db.models import Q, QuerySet
+from django.db.models import QuerySet
+from django.db.models.query_utils import Q
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import viewsets
+from rest_framework.request import Request
 from rest_framework.serializers import ValidationError
 
 from .models import Occupancy, VideoStreamSource
@@ -27,30 +29,41 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         if active_only:
             queryset = queryset.filter(is_active=True)
 
-        mark_in_use_until = self.request.query_params.get(MARK_IN_USE_UNTIL_PARAM)  # pyright: ignore[reportAttributeAccessIssue]
-        if mark_in_use_until:
-            # 0) Validate the incoming ISO-8601 string.
-            try:
-                in_use_until = datetime.fromisoformat(mark_in_use_until)
-            except ValueError as error:
-                raise ValidationError({MARK_IN_USE_UNTIL_PARAM: "Must be a valid ISO 8601 datetime string"}) from error
-
+        if self.request.query_params.get(MARK_IN_USE_UNTIL_PARAM):  # pyright: ignore[reportAttributeAccessIssue]
             now = datetime.now(UTC)
-
-            # 1) Find all the items whose `in_use_until` field is either `null` or has an expired date and time.
+            # Find all the items whose `in_use_until` field is either `null` or has an expired date and time.
             not_in_use_q = Q(in_use_until__isnull=True) | Q(in_use_until__lt=now)
-            candidates = queryset.filter(not_in_use_q)
-
-            # 2) Capture their PKs (so we know exactly which ones).
-            ids_to_update = list(candidates.values_list("pk", flat=True))
-
-            # 3) Bulk-update just those rows.
-            queryset.filter(pk__in=ids_to_update).update(in_use_until=in_use_until)
-
-            # 4) Return those exact rows (now updated).
-            return queryset.filter(pk__in=ids_to_update)
+            queryset = queryset.filter(not_in_use_q)
 
         return queryset
+
+    def filter_out_used_streams(
+        self, paginated_queryset: list[VideoStreamSource], in_use_until_datetime_string: str
+    ) -> list[VideoStreamSource]:
+        try:
+            # 0) Validate the incoming ISO-8601 string.
+            in_use_until = datetime.fromisoformat(in_use_until_datetime_string)
+        except ValueError as error:
+            raise ValidationError({MARK_IN_USE_UNTIL_PARAM: "Must be a valid ISO 8601 datetime string"}) from error
+
+        now = datetime.now(UTC)
+        # 1) Find all the items whose `in_use_until` field is either `None` or has an expired date and time.
+        candidates = [
+            video_stream
+            for video_stream in paginated_queryset
+            if (video_stream.in_use_until is None) or (video_stream.in_use_until < now)
+        ]
+
+        ids_to_update = []
+        for candidate in candidates:
+            # 2) Capture their PKs (so we know exactly which ones).
+            ids_to_update.append(candidate.pk)
+            candidate.in_use_until = in_use_until
+
+        # 3) Bulk-update just those rows.
+        self.queryset.filter(pk__in=ids_to_update).update(in_use_until=in_use_until)
+
+        return candidates
 
     @extend_schema(
         responses=VideoStreamSourceSerializerSchema,
@@ -68,12 +81,15 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
             ),
         ],
     )
-    def list(self, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
+    def list(self, request: Request, *args: Any, **kwargs: Any) -> dict[str, Any]:  # noqa: ARG002
         # There may be several CCTV cameras in one parking lot.
         # The code below groups parking lots by video streams.
         queryset = self.filter_queryset(self.get_queryset())
-        page = self.paginate_queryset(queryset)
-        serializer = self.get_serializer(page, many=True)
+        paginated_queryset = cast("list[VideoStreamSource]", self.paginate_queryset(queryset))
+        if in_use_until_datetime_string := request.query_params.get(MARK_IN_USE_UNTIL_PARAM):
+            paginated_queryset = self.filter_out_used_streams(paginated_queryset, in_use_until_datetime_string)
+            self.paginator.count = len(paginated_queryset)  # pyright: ignore[reportOptionalMemberAccess]
+        serializer = self.get_serializer(paginated_queryset, many=True)
         video_streams = serializer.data
         stream_details = defaultdict(list)
 
