@@ -141,8 +141,7 @@ class VideoStreamSourceTests(ExtendedTestCaseWithData):
     def test_request_parameters(self) -> None:
         """Test all request parameters at the same time."""
         limit = 1
-        delta_seconds = timedelta(seconds=2)
-        in_use_until = (datetime.now(UTC) + delta_seconds).isoformat()
+        in_use_until = (datetime.now(UTC) + timedelta(seconds=2)).isoformat()
         response = self.client.get(
             self.video_stream_path,
             query_params={"limit": limit, "offset": limit, "active_only": True, "mark_in_use_until": in_use_until},
