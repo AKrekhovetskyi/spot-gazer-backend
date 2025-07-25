@@ -33,7 +33,7 @@ poetry self add poetry-dotenv-plugin
 To run the backend service, execute the following commands in the Linux terminal:
 
 ```bash
-git clone https://github.com/AndriyKy/spot-gazer.git
+git clone https://github.com/AKrekhovetskyi/spot-gazer.git
 cd spot-gazer-backend
 ```
 
