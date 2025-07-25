@@ -31,8 +31,7 @@ class VideoStreamSourceViewSet(viewsets.ModelViewSet):
         if MARK_IN_USE_UNTIL_PARAM in self.request.query_params:  # pyright: ignore[reportAttributeAccessIssue]
             now = datetime.now(UTC)
             # Find all the items whose `in_use_until` field is either `null` or has an expired date and time.
-            not_in_use_q = Q(in_use_until__isnull=True) | Q(in_use_until__lt=now)
-            queryset = queryset.filter(not_in_use_q)
+            queryset = queryset.filter(Q(in_use_until__isnull=True) | Q(in_use_until__lt=now))
 
         return queryset
 
