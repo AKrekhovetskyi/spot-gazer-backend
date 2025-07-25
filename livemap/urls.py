@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework import routers
 
-from livemap.drf_views import OccupancyViewSet, VideoStreamSourceViewSet
+from livemap.drf.views import OccupancyViewSet, VideoStreamSourceViewSet
 from livemap.views import index
 
 router = routers.DefaultRouter()
