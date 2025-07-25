@@ -27,7 +27,7 @@ class VideoStreamSourceTests(ExtendedTestCaseWithData):
     def test_get_method(self) -> None:
         response = self.client.get(self.video_stream_path, **self.default_kwargs)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        results_number = 1
+        results_number = 2
         self.assertEqual(len(response.json()["results"]), results_number, msg=response.json())
         streams_number = 2
         self.assertEqual(len(response.json()["results"][0]["streams"]), streams_number)
