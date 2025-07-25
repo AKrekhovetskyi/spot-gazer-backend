@@ -138,6 +138,29 @@ class VideoStreamSourceTests(ExtendedTestCaseWithData):
         self.assertEqual(response.status_code, status.HTTP_200_OK, msg=response.json())
         self.assertNotEqual(response.json(), [])
 
+    def test_request_parameters(self) -> None:
+        """Test all request parameters at the same time."""
+        limit = 1
+        delta_seconds = timedelta(seconds=2)
+        in_use_until = (datetime.now(UTC) + delta_seconds).isoformat()
+        response = self.client.get(
+            self.video_stream_path,
+            query_params={"limit": limit, "offset": limit, "active_only": True, "mark_in_use_until": in_use_until},
+            **self.default_kwargs,
+        )
+        self.assertEqual(response.json()["count"], limit, msg=response.json())
+
+        response = self.client.get(self.video_stream_path, **self.default_kwargs)
+        number_of_reserved_streams = len(
+            [
+                True
+                for parking_lot in response.json()["results"]
+                for stream in parking_lot["streams"]
+                if stream["in_use_until"] is not None
+            ]
+        )
+        self.assertEqual(number_of_reserved_streams, limit, msg=response.json())
+
 
 class OccupancyTests(ExtendedTestCaseWithData):
     occupancy_path = "/api/occupancy/"
