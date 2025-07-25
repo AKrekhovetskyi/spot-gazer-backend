@@ -31,7 +31,7 @@ class TestCaseWithData:
             latitude=fake.latitude(),
             longitude=fake.longitude(),
         )
-        ParkingLot.objects.create(
+        another_parking_lot = ParkingLot.objects.create(
             address=self.address,
             total_spots=fake.pyint(),
             spots_for_disabled=fake.pyint(),
@@ -52,6 +52,12 @@ class TestCaseWithData:
             stream_source=fake.url(),
             processing_rate=self.small_parking_lot.processing_rate,
             is_active=True,
+        )
+        VideoStreamSource.objects.create(
+            parking_lot=another_parking_lot,
+            stream_source=fake.url(),
+            processing_rate=fake.random_element(VideoStreamSource.ProcessingRate.values),
+            is_active=False,
         )
         Occupancy.objects.create(parking_lot=self.parking_lot, occupied_spots=fake.pyint(min_value=1))
         Occupancy.objects.create(parking_lot=self.parking_lot, occupied_spots=fake.pyint(min_value=1))
