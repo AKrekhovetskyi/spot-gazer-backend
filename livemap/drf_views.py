@@ -2,8 +2,7 @@ from collections import defaultdict
 from datetime import UTC, datetime, timedelta
 from typing import Any, cast
 
-from django.db.models import QuerySet
-from django.db.models.query_utils import Q
+from django.db.models import Q, QuerySet
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 from rest_framework import viewsets
