@@ -10,7 +10,8 @@ from rest_framework.request import Request
 from rest_framework.serializers import ValidationError
 
 from livemap.models import Occupancy, VideoStreamSource
-from livemap.serializers import OccupancySerializer, VideoStreamSourceSerializer, VideoStreamSourceSerializerSchema
+
+from .serializers import OccupancySerializer, VideoStreamSourceSerializer, VideoStreamSourceSerializerSchema
 
 ACTIVE_ONLY_PARAM = "active_only"
 MARK_IN_USE_UNTIL_PARAM = "mark_in_use_until"

@@ -2,7 +2,7 @@ from typing import Any, ClassVar
 
 from rest_framework import serializers
 
-from .models import Occupancy, ParkingLot, VideoStreamSource
+from livemap.models import Occupancy, ParkingLot, VideoStreamSource
 
 
 def validate_parking_lot_id(parking_lot_id: int | None) -> int | None:
