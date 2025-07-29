@@ -62,6 +62,22 @@ Then run SpotGazer:
 poetry run python3 -m manage.py runserver
 ```
 
+## 🐳 Docker
+
+Before you start building, create and populate the `.env` file with the required environment variable.
+
+Use the following command to build a Docker container:
+
+```bash
+docker build --tag spot-gazer-backend:v1.0.0 .
+```
+
+Run the container with an exposed port:
+
+```bash
+docker run --rm -p 8000:8000 spot-gazer-backend:v1.0.0
+```
+
 ## 💾 Storage
 
 For **development and testing**, the environment uses a default **SQLite database**.
