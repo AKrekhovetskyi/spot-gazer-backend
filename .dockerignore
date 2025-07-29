@@ -1,0 +1,42 @@
+# Git
+.git
+.gitignore
+.gitmodules
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Byte-compiled / optimized / DLL files
+**/__pycache__/
+**/*.py[cod]
+
+# Unit test / coverage reports
+htmlcov/
+.coverage
+nosetests.xml
+coverage.xml
+
+# Django stuff:
+*.log
+
+# Virtual environment
+.env.sample
+.venv/
+venv/
+
+# Cache
+.cache
+.pytest_cache
+.ruff_cache
+
+# Databases
+*.sqlite3
+
+# Development configurations
+.configs
+.codespellrc
+.vscode
+.pre-commit-config.yaml
+.codespellrc
