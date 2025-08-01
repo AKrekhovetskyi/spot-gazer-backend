@@ -80,5 +80,4 @@ USER appuser
 # Expose the application port
 EXPOSE 8000
 
-# Run migrations and collectstatic at container startup (not build time)
-CMD ["sh", "-c", "poetry run python manage.py migrate && poetry run python manage.py collectstatic --noinput && poetry run python manage.py runserver 0.0.0.0:8000"]
+CMD ["${WORKDIR_ROOT}/app/entrypoint.sh"]
