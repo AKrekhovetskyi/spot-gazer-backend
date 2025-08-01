@@ -16,6 +16,7 @@ dependencies = [
     "djangorestframework-simplejwt>=5.5.0",
     "drf-spectacular>=0.28.0",
     "django-celery-beat>=2.8.1",
+    "redis>=6.2.0",
 ]
 
 [tool.poetry]
