@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -108,3 +110,16 @@ class Occupancy(models.Model):
 
     def __str__(self) -> str:
         return f"{self.occupied_spots} occupied spots, {self.parking_lot}"
+
+
+class HourlyOccupancySummary(models.Model):
+    parking_lot = models.ForeignKey(ParkingLot, on_delete=models.CASCADE, related_name="hourly_occupancy")
+    avg_occupied_spots = models.PositiveSmallIntegerField()
+    hour = models.PositiveSmallIntegerField(help_text="0-23")
+    date = models.DateField()
+
+    class Meta:
+        unique_together: ClassVar = ["parking_lot", "hour", "date"]
+
+    def __str__(self) -> str:
+        return f"{self.hour}:00-{self.hour + 1}:00 {self.date}: {self.avg_occupied_spots} ({self.parking_lot})"
