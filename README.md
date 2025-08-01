@@ -62,6 +62,29 @@ Then run SpotGazer:
 poetry run python3 -m manage.py runserver
 ```
 
+### 🥬 Tasks scheduling with Celery and Redis
+
+First install and run Redis to start periodic tasks such as occupancy statistics aggregation by hours.
+Execute the following command to start the Redis instance in a Docker container:
+
+```bash
+docker run -d --name redis -p 6379:6379 redis:8.0.3-bookworm
+```
+
+Start a Celery worker with a Celery Beat in the background:
+
+```bash
+celery -A django_core worker -B --loglevel info --logfile "$(pwd)/celery.log" --detach
+```
+
+You can stop the worker with the following command:
+
+```bash
+celery -A django_core control shutdown
+```
+
+Head over to the Django admin console ([http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/)) after creating an admin user to schedule predefined periodic tasks.
+
 ## 🐳 Docker
 
 Before you start building, create and populate the `.env` file with the required environment variable.
